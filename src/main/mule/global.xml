@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:secure-properties="http://www.mulesoft.org/schema/mule/secure-properties" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/secure-properties http://www.mulesoft.org/schema/mule/secure-properties/current/mule-secure-properties.xsd">
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="10bc1cf9-dd30-41cc-96f7-4861c3e8c9d0" >
+		<salesforce:basic-connection username="rahelmeasho916@agentforce.com" password="Mysalesforce@1901" securityToken="s47J6tT19SevIaKdyMdF4vRb" url="https://orgfarm-56b85ad325-dev-ed.develop.my.salesforce.com/services/Soap/u/61.0" />
+	</salesforce:sfdc-config>
+	<global-property doc:name="Global Property" doc:id="1f4f974c-bae9-40ee-b84a-4167e5e76ec1" name="mule.env" value="dev" />
+	<global-property doc:name="Global Property" doc:id="91a39322-0459-4ec8-902f-ea746116b712" name="mule.secure.key" value="Mysalesforcekey" />
+	<configuration-properties doc:name="Configuration properties" doc:id="c5edb1db-bdc7-49e9-bbc7-5c06719cf998" file="config/config-${mule.env}.yaml" />
+	<secure-properties:config name="Secure_Properties_Config" doc:name="Secure Properties Config" doc:id="d231c0db-76fe-4ef9-9e9a-0f776c4ef440" file="config/secure-${mule.env}.yaml" key="${mule.secure.key}" >
+		<secure-properties:encrypt algorithm="Blowfish" />
+	</secure-properties:config>
+</mule>

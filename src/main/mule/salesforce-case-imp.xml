@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="salesforce-case-impFlow" doc:id="c25891a4-d227-43b4-984e-ecf71a77b01b" >
+		<logger level="INFO" doc:name="Logger" doc:id="55e988d0-7f92-4119-81e4-405bdbc9a4de" />
+		<ee:transform doc:name="Transform Message" doc:id="dc4e2619-f5f7-4697-943b-54baba14bad1" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+[{
+	SuppliedName: payload.contactName default "",
+	Origin: payload.caseType default "",
+	Description: payload.description default "",
+	ContactEmail: payload.email default ""
+}]]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<salesforce:create doc:id="fe45921b-0092-48ad-859e-db7bc6846009" config-ref="Salesforce_Config" type="Case"/>
+		<ee:transform doc:name="Transform Message" doc:id="5aef2854-c2f2-4240-abb3-4298f6954510" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="e4bbb54c-df12-4558-a0ad-ed43ebf21234" />
+	</flow>
+	<flow name="salesforce-case-impFlow1" doc:id="567f3dc8-41f8-4a60-b689-d778f30505ff" >
+		<salesforce:retrieve type="Case" doc:name="Retrieve" doc:id="666832ff-4436-4fdf-885f-a5dc37fe048d" config-ref="Salesforce_Config"/>
+		<ee:transform doc:name="Transform Message" doc:id="b9fc0c38-33ec-44b0-89b1-b41def7c6fe5" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+payload map ( payload01 , indexOfPayload01 ) -> {
+	caseNumber: payload01.CaseNumber default "",
+	contactName:payload01.SuppliedName default "",
+	email: payload01.ContactEmail default "",
+	caseType: payload01.Type default "",
+	status: payload01.Status default "",
+	description: payload01.Description default ""
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
