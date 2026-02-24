@@ -26,7 +26,10 @@ output application/java
 				<ee:set-payload ><![CDATA[%dw 2.0
 output application/json
 ---
-payload]]></ee:set-payload>
+{
+	"caseId": payload.items[0].id,
+	"message": "success"
+}]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
 		<logger level="INFO" doc:name="Logger" doc:id="e4bbb54c-df12-4558-a0ad-ed43ebf21234" />
